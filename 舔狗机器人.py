@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as BP
 import json
 import re
+
 def kaixin_beitian(wo):
    data_dict={
     "info":wo,
@@ -25,6 +26,7 @@ def kaixin_beitian(wo):
     repon.encoding='utf8'
     soup=BP(repon.text,"html.parser")
     print(soup.text)
+      
 print('主人你好,我是您忠实舔狗,很好兴陪您聊天')
 while True:
   data=input('帅气逼人的主人：')
