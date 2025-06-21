@@ -1,7 +1,9 @@
-import requests                                         from bs4 import BeautifulSoup
+import requests                                         
+from bs4 import BeautifulSoup
 import time
 
-headers = {                                                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+headers{
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         "Accept-Language": "zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7"
         }
 
@@ -12,7 +14,8 @@ def get(url):
         content = soup.find('div', id='chaptercontent')
         title = soup.find('span', class_='title').get_text()
         text = content.get_text(separator='\n', strip=True)
-        if len(text)>60:                                            print(f'正在下载{title}...')
+        if len(text)>60:                                            
+            print(f'正在下载{title}...')
             with open(f'{title}.txt','w')as t:
                 t.write(text)
         time.sleep(1)
