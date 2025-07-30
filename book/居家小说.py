@@ -9,29 +9,36 @@ headers = {
     "Accept-Language": "en-US,en;q=0.5",
 }
 
-def get(url, pbar, info):
-    # 只在真正开始抓取时打印一次
-    tqdm.write(f"正在爬取：{info}")
+def need_save(url):
+    """返回是否需要保存及标题、正文"""
     try:
         r = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(r.text, 'html.parser')
         content = soup.find('div', id='chaptercontent')
         title = soup.find('span', class_='title').get_text(strip=True)
         text = content.get_text(separator='\n', strip=True)
-        if len(text) > 60:
-            with open(f'{title}.txt', 'w', encoding='utf-8') as f:
-                f.write(text)
-    except Exception as e:
-        pass
-    finally:
-        pbar.update(1)
-        time.sleep(0.2)
+        return len(text) > 60, title, text
+    except Exception:
+        return False, None, None
 
 base_url = "https://fe68c1592abb7b99132c24.577ff.cfd/book/40684"
-total = 500 * 4   # 500 章 × 4 个链接
-with tqdm(total=total, desc="下载进度", unit="章") as pbar:
-    for i in range(1, 501):
-        get(f"{base_url}/{i}.html", pbar, f"第{i}章-主")
-        for j in range(2, 5):
-            get(f"{base_url}/{i}_{j}.html", pbar, f"第{i}章-分{j}")
+tasks = [(i, flag) for i in range(1, 501) for flag in [''] + [f'_{j}' for j in range(2, 5)]]
+
+saved_cnt = 0           # 已保存的章节计数
+pbar = tqdm(total=None, desc="保存进度", unit="章")  # 未知总长
+
+for i, flag in tasks:
+    url = f"{base_url}/{i}{flag}.html"
+    ok, title, text = need_save(url)
+    if ok:
+        tqdm.write(f"正在爬取：第{i}章{flag or ''}")
+        with open(f"{title}.txt", "w", encoding="utf-8") as f:
+            f.write(text)
+        saved_cnt += 1
+        pbar.total = saved_cnt + (len(tasks) - pbar.n - 1)  # 动态估算（可选）
+        pbar.update(1)
+    time.sleep(0.2)
+
+pbar.close()
+print(f"\n全部完成，共保存 {saved_cnt} 章")
 
