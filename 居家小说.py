@@ -1,8 +1,7 @@
-import requests                                  
+import requests
 from bs4 import BeautifulSoup
 import time
 from tqdm import tqdm
-
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
@@ -10,27 +9,29 @@ headers = {
     "Accept-Language": "en-US,en;q=0.5",
 }
 
-def get(url): 
+def get(url, pbar, info):
+    # 只在真正开始抓取时打印一次
+    tqdm.write(f"正在爬取：{info}")
     try:
-        r = requests.get(url, headers=headers)
-        soup = BeautifulSoup(r.text,'html.parser')              
+        r = requests.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(r.text, 'html.parser')
         content = soup.find('div', id='chaptercontent')
-        title = soup.find('span', class_='title').get_text()
+        title = soup.find('span', class_='title').get_text(strip=True)
         text = content.get_text(separator='\n', strip=True)
-        if len(text)>60:
-            print(f'正在下载{title}...')
-            with open(f'{title}.txt','w')as t:
-                t.write(text)
-        time.sleep(1)
+        if len(text) > 60:
+            with open(f'{title}.txt', 'w', encoding='utf-8') as f:
+                f.write(text)
     except Exception as e:
-        print(f'获取失败{e}')
+        pass
+    finally:
+        pbar.update(1)
+        time.sleep(0.2)
 
-
-for i in range(1,501):
-    url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}.html'
-    get(url)
-    for j in tqdm(range(2,5),desc=f"子页面", leave=False):
-        url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}_{j}.html'
-        get(url)
-
+base_url = "https://fe68c1592abb7b99132c24.577ff.cfd/book/40684"
+total = 500 * 4   # 500 章 × 4 个链接
+with tqdm(total=total, desc="下载进度", unit="章") as pbar:
+    for i in range(1, 501):
+        get(f"{base_url}/{i}.html", pbar, f"第{i}章-主")
+        for j in range(2, 5):
+            get(f"{base_url}/{i}_{j}.html", pbar, f"第{i}章-分{j}")
 
