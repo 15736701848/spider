@@ -1,6 +1,7 @@
 import requests                                  
 from bs4 import BeautifulSoup
 import time
+from tqdm import tqdm
 
 
 headers = {
@@ -28,7 +29,7 @@ def get(url):
 for i in range(1,501):
     url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}.html'
     get(url)
-    for j in range(2,5):
+    for j in tqdm(range(2,5),desc=f"子页面", leave=False):
         url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}_{j}.html'
         get(url)
 
