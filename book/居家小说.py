@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import time
+import os
 
 headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
@@ -50,6 +51,9 @@ def get(url):
     except Exception as e:
         print(f'获取失败{e}')
 
+
+os.mkdir("斗罗大陆")
+os.chdir("斗罗大陆")
 
 for i in range(1, 501):
     url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}.html'
