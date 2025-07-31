@@ -2,7 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import os
+import logging
 
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -25,14 +27,14 @@ def spider(url):
         if text1 in text:
             return 6
         else:
-            print(f'正在下载{title1}...')
+            logging.info(f'正在下载{title1}...')
             text = text1
             with open(f'{title1}.txt', 'w') as t:
                 t.write(text1)
             time.sleep(1)
 
     except Exception as e:
-        print(f'获取失败{e}')
+        logging.info(f'获取失败{e}')
 
 
 
@@ -44,12 +46,12 @@ def get(url):
         title = soup.find('span', class_='title').get_text()
         global text
         text = content.get_text(separator='\n', strip=True)
-        print(f'正在获取{title}')
+        logging.info(f'正在获取{title}')
         with open(f'{title}.txt', 'w') as t:
             t.write(text)
         time.sleep(1)
     except Exception as e:
-        print(f'获取失败{e}')
+        logging.info(f'获取失败{e}')
 
 
 os.makedirs("斗罗大陆", exist_ok=True)
