@@ -25,7 +25,7 @@ def spider(url):
         title1 = soup1.find('span', class_='title').get_text()
         text1 = content1.get_text(separator='\n', strip=True)
         if text1 in text:
-            return 6
+            return None
         else:
             logging.info(f'正在下载{title1}...')
             text = text1
@@ -33,6 +33,7 @@ def spider(url):
                 f.write(text1)
 
             time.sleep(1)
+            return 'ok'
 
     except Exception as e:
         logging.info(f'获取失败{e}')
@@ -49,5 +50,5 @@ for i in range(1, 501):
     for j in range(2, 5):
         url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}_{j}.html'  
         statue = spider(url)	
-        if statue == 6:
+        if statue == None:
             break
