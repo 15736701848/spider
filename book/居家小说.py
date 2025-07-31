@@ -12,6 +12,7 @@ headers = {
 text = " "
 
 
+
 def spider(url):
     global text
     try:
@@ -42,11 +43,10 @@ def get(url):
         title = soup.find('span', class_='title').get_text()
         global text
         text = content.get_text(separator='\n', strip=True)
-        if len(text) > 60:
-            print(f'正在下载{title}...')
-            with open(f'{title}.txt', 'w') as t:
-                t.write(text)
-            time.sleep(1)
+        print(f'正在获取{title}')
+        with open(f'{title}.txt', 'w') as t:
+            t.write(text)
+        time.sleep(1)
     except Exception as e:
         print(f'获取失败{e}')
 
@@ -56,6 +56,8 @@ for i in range(1, 501):
     get(url)
     for j in range(2, 5):
         url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}_{j}.html'  
-        spider(url)	   
+        statue = spider(url)	
+        if statue == 6:
+            break
 
 
