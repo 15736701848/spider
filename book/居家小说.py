@@ -52,7 +52,7 @@ def get(url):
         print(f'获取失败{e}')
 
 
-os.mkdir("斗罗大陆")
+os.makedirs("斗罗大陆", exist_ok=True)
 os.chdir("斗罗大陆")
 
 for i in range(1, 501):
@@ -63,5 +63,3 @@ for i in range(1, 501):
         statue = spider(url)	
         if statue == 6:
             break
-
-
