@@ -11,6 +11,7 @@ headers = {
 
 text = " "
 
+
 def spider(url):
     global text
     try:
@@ -48,6 +49,7 @@ def get(url):
             time.sleep(1)
     except Exception as e:
         print(f'获取失败{e}')
+
 
 for i in range(1, 501):
     url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}.html'
