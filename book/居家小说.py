@@ -13,6 +13,8 @@ headers = {
 
 
 text = " "
+timeout = 10
+book_name = "斗罗大陆" 
 
 
 def build_url(chapter,part=None):
@@ -32,7 +34,9 @@ def download_pages(url,check=True):
     '''
     global text
     try:
-        r1 = requests.get(url, headers=headers)
+        r1 = requests.get(url,
+                          headers=headers,
+                          timeout=timeout)
         soup1 = BeautifulSoup(r1.text, 'html.parser')
         content1 = soup1.find('div', id='chaptercontent')
         title1 = soup1.find('span', class_='title').get_text()
@@ -56,12 +60,12 @@ def download_pages(url,check=True):
 
 
 
-os.makedirs("斗罗大陆", exist_ok=True)
-os.chdir("斗罗大陆")
+os.makedirs(book_name, exist_ok=True)
+os.chdir(book_name)
 
 for i in range(1, 501):
-    dwnload_pages(build_url(i),check=False)
+    download_pages(build_url(i),check=False)
     for j in range(2, 5):
-        statue = dwnload_pages(build_url(i,j),check=True)	
+        statue = download_pages(build_url(i,j),check=True)	
         if statue == None:
             break
