@@ -15,8 +15,21 @@ headers = {
 text = " "
 
 
+def build_url(chapter,part=None):
+    '''
+    构造url
+    '''
+    base = 'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684'
+    if part:
+        return f'{base}/{chapter}_{part}.html'
+    return f'{base}/{chapter}.html'
 
-def spider(url):
+
+
+def dwnload_pages(url):
+    '''
+    获取主页及分页
+    '''
     global text
     try:
         r1 = requests.get(url, headers=headers)
@@ -32,7 +45,7 @@ def spider(url):
             with open(f'{title1}.txt', 'w', encoding='utf-8') as f:
                 f.write(text1)
 
-            time.sleep(1)
+            time.sleep(1) #礼貌延时
             return 'ok'
 
     except Exception as e:
@@ -46,10 +59,8 @@ os.makedirs("斗罗大陆", exist_ok=True)
 os.chdir("斗罗大陆")
 
 for i in range(1, 501):
-    url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}.html'
-    spider(url)
+    dwnload_pages(build_url(i))
     for j in range(2, 5):
-        url = f'https://fe68c1592abb7b99132c24.577ff.cfd/book/40684/{i}_{j}.html'  
-        statue = spider(url)	
+        statue = dwnload_pages(build_url(i,j))	
         if statue == None:
             break
