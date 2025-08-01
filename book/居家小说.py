@@ -37,6 +37,7 @@ def spider(url):
 
     except Exception as e:
         logging.info(f'获取失败{e}')
+        return 'Failed'
 
 
 
