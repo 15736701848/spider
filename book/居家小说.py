@@ -26,7 +26,7 @@ def build_url(chapter,part=None):
 
 
 
-def dwnload_pages(url):
+def dwnload_pages(url,check=True):
     '''
     获取主页及分页
     '''
@@ -37,16 +37,17 @@ def dwnload_pages(url):
         content1 = soup1.find('div', id='chaptercontent')
         title1 = soup1.find('span', class_='title').get_text()
         text1 = content1.get_text(separator='\n', strip=True)
-        if text1 in text:
-            return None
-        else:
-            logging.info(f'正在下载{title1}...')
-            text = text1
-            with open(f'{title1}.txt', 'w', encoding='utf-8') as f:
-                f.write(text1)
+        if check:
+            if text1 in text:
+                return None
+    
+        logging.info(f'正在下载{title1}...')
+        text = text1
+        with open(f'{title1}.txt', 'w', encoding='utf-8') as f:
+            f.write(text1)
 
-            time.sleep(1) #礼貌延时
-            return 'ok'
+        time.sleep(1) #礼貌延时
+        return 'ok'
 
     except Exception as e:
         logging.info(f'获取失败{e}')
@@ -59,8 +60,8 @@ os.makedirs("斗罗大陆", exist_ok=True)
 os.chdir("斗罗大陆")
 
 for i in range(1, 501):
-    dwnload_pages(build_url(i))
+    dwnload_pages(build_url(i),check=False)
     for j in range(2, 5):
-        statue = dwnload_pages(build_url(i,j))	
+        statue = dwnload_pages(build_url(i,j),check=True)	
         if statue == None:
             break
