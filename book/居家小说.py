@@ -26,7 +26,7 @@ def build_url(chapter,part=None):
 
 
 
-def dwnload_pages(url,check=True):
+def download_pages(url,check=True):
     '''
     获取主页及分页
     '''
